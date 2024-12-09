@@ -4,7 +4,7 @@ import Config
 config :flight_tracker, FlightTracker.Repo,
   username: "postgres",
   password: "postgres",
-  hostname: "localhost",
+  hostname: "flight_db",
   database: "flight_tracker_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
