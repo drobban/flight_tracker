@@ -26,7 +26,7 @@ config :flight_tracker, FlightTrackerWeb.Endpoint,
   secret_key_base: "oWcGmOMaFuKrpor7c+C1+vOOC3kXaHTNIkPJq0j9g0NXO7QVzJTxTDownwydSnEZ",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:flight_tracker, ~w(--sourcemap=inline --watch)]},
-    tailwind: {Tailwind, :install_and_run, [:flight_tracker, ~w(--watch)]}
+    tailwind: {Tailwind, :install_and_run, [:flight_tracker, ~w(--watch --poll)]}
   ]
 
 # ## SSL Support

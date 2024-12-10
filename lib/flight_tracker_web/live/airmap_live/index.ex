@@ -1,5 +1,6 @@
 defmodule FlightTrackerWeb.AirmapLive.Index do
   use FlightTrackerWeb, :live_view
+  require Logger
   alias FlightTrackerWeb.Components.LeafletMap, as: LeafletMap
 
   @impl true
@@ -12,12 +13,11 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
 
   @impl true
   def render(assigns) do
+    Logger.debug(inspect assigns)
     ~H"""
-    <div class="h-screen bg-gray-100">
-      <div class="h-screen justify-center items-center rounded-md shadow-lg">
-        <LeafletMap.map class="h-80" />
+      <div class="h-full w-full justify-center items-center">
+        <LeafletMap.map class="h-full bg-gray" />
       </div>
-    </div>
     """
   end
 end

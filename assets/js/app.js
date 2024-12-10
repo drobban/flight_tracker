@@ -44,6 +44,14 @@ let Hooks = {}
 
 Hooks.Map = {
   mounted(){
+
+	var civilian_transport = L.icon({
+	    iconUrl: 'assets/images/civilian-transport.png', // Path to your PNG image
+	    iconSize: [64, 64], // Size of the icon (width, height in pixels)
+	    iconAnchor: [16, 32], // Point of the icon which will correspond to the marker's position (center bottom)
+	    popupAnchor: [0, -32] // Position of the popup relative to the icon (above the marker)
+	});
+
     const markers = {}
     const map = L.map('mapid').setView([51.505, -0.09], 14)
     const paths = {}
@@ -84,9 +92,13 @@ Hooks.Map = {
     })
 
     this.handleEvent("add_marker", ({reference, lat, lon}) => {      
+	const marker_icons = {
+		"civilian-transport": { icon: civilian_transport },
+		"": {}
+	}
       // lets not add duplicates for the same marker!
       if (markers[reference] == null) {
-        const marker = L.marker(L.latLng(lat, lon))
+        const marker = L.marker(L.latLng(lat, lon), marker_icons["civilian-transport"])
 
         marker.addTo(map)
 

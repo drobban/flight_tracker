@@ -36,7 +36,7 @@ config :esbuild,
   version: "0.17.11",
   flight_tracker: [
     args:
-      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/* --loader:.png=file --loader:.jpg=file --loader:.svg=file --asset-names=images/[name] --log-level=debug),
+      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --loader:.png=file --loader:.jpg=file --loader:.svg=file --asset-names=images/[name] ),
     cd: Path.expand("../assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
