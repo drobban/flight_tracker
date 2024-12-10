@@ -21,7 +21,12 @@
 
 <.back navigate={~p"/aircrafts"}>Back to aircrafts</.back>
 
-<.modal :if={@live_action == :edit} id="aircraft-modal" show on_cancel={JS.patch(~p"/aircrafts/#{@aircraft}")}>
+<.modal
+  :if={@live_action == :edit}
+  id="aircraft-modal"
+  show
+  on_cancel={JS.patch(~p"/aircrafts/#{@aircraft}")}
+>
   <.live_component
     module={FlightTrackerWeb.AircraftLive.FormComponent}
     id={@aircraft.id}

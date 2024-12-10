@@ -19,6 +19,7 @@ defmodule FlightTrackerWeb.Router do
 
     get "/", PageController, :home
 
+    live "/map", AirmapLive.Index, :index
 
     live "/aircrafts", AircraftLive.Index, :index
     live "/aircrafts/new", AircraftLive.Index, :new

@@ -36,7 +36,12 @@
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="aircraft-modal" show on_cancel={JS.patch(~p"/aircrafts")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="aircraft-modal"
+  show
+  on_cancel={JS.patch(~p"/aircrafts")}
+>
   <.live_component
     module={FlightTrackerWeb.AircraftLive.FormComponent}
     id={@aircraft.id || :new}

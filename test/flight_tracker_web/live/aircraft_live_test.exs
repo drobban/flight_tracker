@@ -4,9 +4,36 @@ defmodule FlightTrackerWeb.AircraftLiveTest do
   import Phoenix.LiveViewTest
   import FlightTracker.SkymapFixtures
 
-  @create_attrs %{name: "some name", status: :takeoff, type: :civilian, pos_lat: "120.5", pos_long: "120.5", destination_lat: "120.5", destination_long: "120.5", speed_kmh: 42}
-  @update_attrs %{name: "some updated name", status: :inflight, type: :military, pos_lat: "456.7", pos_long: "456.7", destination_lat: "456.7", destination_long: "456.7", speed_kmh: 43}
-  @invalid_attrs %{name: nil, status: nil, type: nil, pos_lat: nil, pos_long: nil, destination_lat: nil, destination_long: nil, speed_kmh: nil}
+  @create_attrs %{
+    name: "some name",
+    status: :takeoff,
+    type: :civilian,
+    pos_lat: "120.5",
+    pos_long: "120.5",
+    destination_lat: "120.5",
+    destination_long: "120.5",
+    speed_kmh: 42
+  }
+  @update_attrs %{
+    name: "some updated name",
+    status: :inflight,
+    type: :military,
+    pos_lat: "456.7",
+    pos_long: "456.7",
+    destination_lat: "456.7",
+    destination_long: "456.7",
+    speed_kmh: 43
+  }
+  @invalid_attrs %{
+    name: nil,
+    status: nil,
+    type: nil,
+    pos_lat: nil,
+    pos_long: nil,
+    destination_lat: nil,
+    destination_long: nil,
+    speed_kmh: nil
+  }
 
   defp create_aircraft(_) do
     aircraft = aircraft_fixture()

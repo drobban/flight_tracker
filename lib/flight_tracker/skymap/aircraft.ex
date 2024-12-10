@@ -18,7 +18,25 @@ defmodule FlightTracker.Skymap.Aircraft do
   @doc false
   def changeset(aircraft, attrs) do
     aircraft
-    |> cast(attrs, [:name, :type, :pos_lat, :pos_long, :destination_lat, :destination_long, :status, :speed_kmh])
-    |> validate_required([:name, :type, :pos_lat, :pos_long, :destination_lat, :destination_long, :status, :speed_kmh])
+    |> cast(attrs, [
+      :name,
+      :type,
+      :pos_lat,
+      :pos_long,
+      :destination_lat,
+      :destination_long,
+      :status,
+      :speed_kmh
+    ])
+    |> validate_required([
+      :name,
+      :type,
+      :pos_lat,
+      :pos_long,
+      :destination_lat,
+      :destination_long,
+      :status,
+      :speed_kmh
+    ])
   end
 end

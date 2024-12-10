@@ -8,7 +8,16 @@ defmodule FlightTracker.SkymapTest do
 
     import FlightTracker.SkymapFixtures
 
-    @invalid_attrs %{name: nil, status: nil, type: nil, pos_lat: nil, pos_long: nil, destination_lat: nil, destination_long: nil, speed_kmh: nil}
+    @invalid_attrs %{
+      name: nil,
+      status: nil,
+      type: nil,
+      pos_lat: nil,
+      pos_long: nil,
+      destination_lat: nil,
+      destination_long: nil,
+      speed_kmh: nil
+    }
 
     test "list_aircrafts/0 returns all aircrafts" do
       aircraft = aircraft_fixture()
@@ -21,7 +30,16 @@ defmodule FlightTracker.SkymapTest do
     end
 
     test "create_aircraft/1 with valid data creates a aircraft" do
-      valid_attrs = %{name: "some name", status: :takeoff, type: :civilian, pos_lat: "120.5", pos_long: "120.5", destination_lat: "120.5", destination_long: "120.5", speed_kmh: 42}
+      valid_attrs = %{
+        name: "some name",
+        status: :takeoff,
+        type: :civilian,
+        pos_lat: "120.5",
+        pos_long: "120.5",
+        destination_lat: "120.5",
+        destination_long: "120.5",
+        speed_kmh: 42
+      }
 
       assert {:ok, %Aircraft{} = aircraft} = Skymap.create_aircraft(valid_attrs)
       assert aircraft.name == "some name"
@@ -40,7 +58,17 @@ defmodule FlightTracker.SkymapTest do
 
     test "update_aircraft/2 with valid data updates the aircraft" do
       aircraft = aircraft_fixture()
-      update_attrs = %{name: "some updated name", status: :inflight, type: :military, pos_lat: "456.7", pos_long: "456.7", destination_lat: "456.7", destination_long: "456.7", speed_kmh: 43}
+
+      update_attrs = %{
+        name: "some updated name",
+        status: :inflight,
+        type: :military,
+        pos_lat: "456.7",
+        pos_long: "456.7",
+        destination_lat: "456.7",
+        destination_long: "456.7",
+        speed_kmh: 43
+      }
 
       assert {:ok, %Aircraft{} = aircraft} = Skymap.update_aircraft(aircraft, update_attrs)
       assert aircraft.name == "some updated name"
