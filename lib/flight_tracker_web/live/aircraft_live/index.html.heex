@@ -1,0 +1,48 @@
+<.header>
+  Listing Aircrafts
+  <:actions>
+    <.link patch={~p"/aircrafts/new"}>
+      <.button>New Aircraft</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="aircrafts"
+  rows={@streams.aircrafts}
+  row_click={fn {_id, aircraft} -> JS.navigate(~p"/aircrafts/#{aircraft}") end}
+>
+  <:col :let={{_id, aircraft}} label="Name"><%= aircraft.name %></:col>
+  <:col :let={{_id, aircraft}} label="Type"><%= aircraft.type %></:col>
+  <:col :let={{_id, aircraft}} label="Pos lat"><%= aircraft.pos_lat %></:col>
+  <:col :let={{_id, aircraft}} label="Pos long"><%= aircraft.pos_long %></:col>
+  <:col :let={{_id, aircraft}} label="Destination lat"><%= aircraft.destination_lat %></:col>
+  <:col :let={{_id, aircraft}} label="Destination long"><%= aircraft.destination_long %></:col>
+  <:col :let={{_id, aircraft}} label="Status"><%= aircraft.status %></:col>
+  <:col :let={{_id, aircraft}} label="Speed kmh"><%= aircraft.speed_kmh %></:col>
+  <:action :let={{_id, aircraft}}>
+    <div class="sr-only">
+      <.link navigate={~p"/aircrafts/#{aircraft}"}>Show</.link>
+    </div>
+    <.link patch={~p"/aircrafts/#{aircraft}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, aircraft}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: aircraft.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="aircraft-modal" show on_cancel={JS.patch(~p"/aircrafts")}>
+  <.live_component
+    module={FlightTrackerWeb.AircraftLive.FormComponent}
+    id={@aircraft.id || :new}
+    title={@page_title}
+    action={@live_action}
+    aircraft={@aircraft}
+    patch={~p"/aircrafts"}
+  />
+</.modal>

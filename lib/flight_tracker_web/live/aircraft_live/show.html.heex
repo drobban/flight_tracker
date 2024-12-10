@@ -1,0 +1,33 @@
+<.header>
+  Aircraft <%= @aircraft.id %>
+  <:subtitle>This is a aircraft record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/aircrafts/#{@aircraft}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit aircraft</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @aircraft.name %></:item>
+  <:item title="Type"><%= @aircraft.type %></:item>
+  <:item title="Pos lat"><%= @aircraft.pos_lat %></:item>
+  <:item title="Pos long"><%= @aircraft.pos_long %></:item>
+  <:item title="Destination lat"><%= @aircraft.destination_lat %></:item>
+  <:item title="Destination long"><%= @aircraft.destination_long %></:item>
+  <:item title="Status"><%= @aircraft.status %></:item>
+  <:item title="Speed kmh"><%= @aircraft.speed_kmh %></:item>
+</.list>
+
+<.back navigate={~p"/aircrafts"}>Back to aircrafts</.back>
+
+<.modal :if={@live_action == :edit} id="aircraft-modal" show on_cancel={JS.patch(~p"/aircrafts/#{@aircraft}")}>
+  <.live_component
+    module={FlightTrackerWeb.AircraftLive.FormComponent}
+    id={@aircraft.id}
+    title={@page_title}
+    action={@live_action}
+    aircraft={@aircraft}
+    patch={~p"/aircrafts/#{@aircraft}"}
+  />
+</.modal>
