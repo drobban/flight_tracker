@@ -3,9 +3,18 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
   require Logger
   alias FlightTrackerWeb.Components.LeafletMap, as: LeafletMap
   alias Phoenix
+  alias Phoenix.PubSub
+  alias FlightControl
 
   @impl true
   def mount(_params, _session, socket) do
+    # Setup PubSub 
+    # the topic name is a list of two lat_lngs creating a box.
+    # lat_lng1 represents upper left corner of the box.
+    # lat_lng2 represents lower right corner of the box.
+    lat_lng =  "51.123456:7.123456_45.123456:5.123456"
+    PubSub.subscribe(FlightTracker.PubSub, lat_lng)
+    FlightControl.subscribe(lat_lng)
     opts = [latitude: 51.123456, longitude: 7.123456, reference: "main"]
 
     socket = LeafletMap.liveview_setup(socket, opts)
