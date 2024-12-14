@@ -8,21 +8,23 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    # Setup PubSub 
-    # the topic name is a list of two lat_lngs creating a box.
-    # lat_lng1 represents upper left corner of the box.
-    # lat_lng2 represents lower right corner of the box.
-    lat_lng =  "51.123456:7.123456_45.123456:5.123456"
-    PubSub.subscribe(FlightTracker.PubSub, lat_lng)
-    FlightControl.subscribe(lat_lng)
     opts = [latitude: 51.123456, longitude: 7.123456, reference: "main"]
 
-    socket = LeafletMap.liveview_setup(socket, opts)
+    socket =
+      socket
+      |> LeafletMap.liveview_setup(opts)
+      |> assign(:map_bounds, nil)
+      |> assign(:substring, nil)
+
     {:ok, socket}
   end
 
   @doc """
-  This handle_event is just a simple test.
+  add-plane is just a simple test.
+
+  update_bounds recieves new view bounds of the leaflet js map on 
+  init/mount and every map update (zoom/movement)
+
   """
   @impl true
   def handle_event("add-plane", _unsigned_params, socket) do
@@ -33,10 +35,34 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
     {:noreply, socket}
   end
 
+  def handle_event(
+        "update_bounds",
+        %{
+          "bounds" =>
+            %{
+              "north_west" => %{"lat" => lat1, "lng" => lng1},
+              "south_east" => %{"lat" => lat2, "lng" => lng2}
+            } = bounds
+        },
+        socket
+      ) do
+    if !is_nil(socket.assigns.substring) do
+      PubSub.unsubscribe(FlightTracker.PubSub, socket.assigns.substring)
+      FlightControl.unsubscribe(socket.assigns.substring)
+    end
+
+    # This is what our aircraft will construct and check if inside of. 
+    Logger.debug(inspect(FlightControl.Grid.Square.new(lat1, lng1, lat2, lng2)))
+
+    lat_lng = "#{lat1}:#{lng1}_#{lat2}:#{lng2}"
+    PubSub.subscribe(FlightTracker.PubSub, lat_lng)
+    FlightControl.subscribe(lat_lng)
+
+    {:noreply, socket |> assign(map_bounds: bounds) |> assign(:substring, lat_lng)}
+  end
+
   @impl true
   def render(assigns) do
-    Logger.debug(inspect(assigns))
-
     ~H"""
     <div class="h-full w-full justify-center items-center">
       <LeafletMap.map class="h-full bg-gray" />

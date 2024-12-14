@@ -59,7 +59,7 @@ defmodule FlightTracker.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
       {:aircraft, path: "/home/drobban/code/elixir/aircraft"},
-      {:flight_control, path: "/home/drobban/code/elixir/flight_control"},
+      {:flight_control, path: "/home/drobban/code/elixir/flight_control"}
     ]
   end
 

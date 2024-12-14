@@ -60,7 +60,9 @@ Hooks.Map = {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution:'© OpenStreetMap contributors',
         maxZoom: 19,
-    }).addTo(map)
+    }).addTo(map);
+
+    this.map = map;
 
     this.handleEvent("update_marker_position", ({reference, lat, lon, center_view}) => {
       markers[reference].setLatLng(L.latLng(lat, lon))
@@ -68,7 +70,7 @@ Hooks.Map = {
       if (center_view) {
         map.flyTo(L.latLng(lat, lon))
       }
-    })
+    });
     
     this.handleEvent("draw_path", ({reference, coordinates, color}) => {
       data = {
@@ -77,7 +79,7 @@ Hooks.Map = {
       }
 
       geojsonLayer.addData(data)
-    })
+    });
 
     this.handleEvent("view_init", ({reference, lat, lon, zoom_level = 20}) => {
       geojsonLayer.remove()
@@ -85,11 +87,11 @@ Hooks.Map = {
       geojsonLayer = L.geoJSON().addTo(map).setStyle({color: "#6435c9"})
 
       map.setView(L.latLng(lat, lon), zoom_level)
-    })
+    });
 
     this.handleEvent("set_zoom_level", ({zoom_level}) => {
       map.setZoom(zoom_level)
-    })
+    });
 
     this.handleEvent("add_marker", ({reference, lat, lon}) => {      
 	const marker_icons = {
@@ -104,7 +106,7 @@ Hooks.Map = {
 
         markers[reference] = marker
       }
-    })
+    });
 
     this.handleEvent("add_marker_with_popup", ({reference, lat, lon, link}) => {      
       // lets not add duplicates for the same marker!
@@ -117,7 +119,7 @@ Hooks.Map = {
 
         markers[reference] = marker
       }
-    })
+    });
 
     this.handleEvent("clear", () => {
       geojsonLayer.remove()
@@ -132,7 +134,7 @@ Hooks.Map = {
         markers.delete(reference)
       }
 
-    })
+    });
 
     this.handleEvent("remove_marker", ({reference}) => {
       if (markers[reference] != null) {
@@ -144,8 +146,28 @@ Hooks.Map = {
       }
 
       geojsonLayer.remove()
-    })
-  }
+    });
+    // Send bounds when map loads
+    this.pushBounds();
+
+    // Send bounds when map is moved or zoomed
+    this.map.on("moveend", () => this.pushBounds());
+    this.map.on("zoomend", () => this.pushBounds());
+  },
+
+  pushBounds() {
+    // Get current bounds
+    const bounds = this.map.getBounds();
+    const payload = {
+      bounds: {
+        north_west: { lat: bounds.getNorthWest().lat, lng: bounds.getNorthWest().lng },
+        south_east: { lat: bounds.getSouthEast().lat, lng: bounds.getSouthEast().lng },
+      },
+    };
+
+    // Push event to LiveView
+    this.pushEvent("update_bounds", payload);
+  },
 }
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")

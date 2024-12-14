@@ -16,6 +16,7 @@ defmodule FlightTracker.Application do
       {Finch, name: FlightTracker.Finch},
       # Start a worker by calling: FlightTracker.Worker.start_link(arg)
       # {FlightTracker.Worker, arg},
+      {FlightControl.Worker, nil},
       # Start to serve requests, typically the last entry
       FlightTrackerWeb.Endpoint
     ]
