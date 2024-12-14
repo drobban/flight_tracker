@@ -17,6 +17,7 @@ defmodule FlightTracker.Application do
       # Start a worker by calling: FlightTracker.Worker.start_link(arg)
       # {FlightTracker.Worker, arg},
       {FlightControl.Worker, nil},
+      {DynamicSupervisor, name: FlightTracker.DynamicSupervisor, strategy: :one_for_one},
       # Start to serve requests, typically the last entry
       FlightTrackerWeb.Endpoint
     ]
