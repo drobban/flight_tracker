@@ -5,6 +5,7 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
   alias Phoenix
   alias Phoenix.PubSub
   alias FlightControl
+  alias Aircraft
 
   @impl true
   def mount(_params, _session, socket) do
@@ -30,7 +31,7 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
   def handle_event("add-plane", _unsigned_params, socket) do
     socket =
       socket
-      |> Phoenix.LiveView.push_event("add_marker", %{reference: "MH417", lat: 51.123, lon: 7.3})
+      |> Phoenix.LiveView.push_event("add_marker", %{reference: "MH418", lat: 51.123, lon: 7.3})
 
     {:noreply, socket}
   end
@@ -59,6 +60,19 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
     FlightControl.subscribe(lat_lng)
 
     {:noreply, socket |> assign(map_bounds: bounds) |> assign(:substring, lat_lng)}
+  end
+
+  @impl true
+  def handle_info(%Aircraft.State{} = aircraft, socket) do
+    socket =
+      socket
+      |> Phoenix.LiveView.push_event("add_marker", %{
+        reference: aircraft.name,
+        lat: aircraft.pos_lat,
+        lon: aircraft.pos_long
+      })
+
+    {:noreply, socket}
   end
 
   @impl true

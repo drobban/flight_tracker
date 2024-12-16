@@ -105,6 +105,8 @@ Hooks.Map = {
         marker.addTo(map)
 
         markers[reference] = marker
+      } else {
+        markers[reference].setLatLng(L.latLng(lat, lon))
       }
     });
 
