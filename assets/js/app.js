@@ -47,7 +47,7 @@ Hooks.Map = {
 
 	var civilian_transport = L.icon({
 	    iconUrl: 'assets/images/civilian-transport.png', // Path to your PNG image
-	    iconSize: [64, 64], // Size of the icon (width, height in pixels)
+	    iconSize: [32, 32], // Size of the icon (width, height in pixels)
 	    iconAnchor: [16, 32], // Point of the icon which will correspond to the marker's position (center bottom)
 	    className: 'moving_element',
 	    popupAnchor: [0, -32] // Position of the popup relative to the icon (above the marker)
@@ -145,7 +145,7 @@ Hooks.Map = {
 
         marker.remove()
 
-        markers.delete(reference)
+        delete markers[reference]
       }
 
       geojsonLayer.remove()

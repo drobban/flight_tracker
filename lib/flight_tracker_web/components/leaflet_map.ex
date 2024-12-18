@@ -19,17 +19,5 @@ defmodule FlightTrackerWeb.Components.LeafletMap do
       lon: opts[:longitude],
       zoom_level: opts[:zoom_level] || 15
     })
-    |> Phoenix.LiveView.push_event("add_marker", %{
-      reference: opts[:reference],
-      lat: opts[:latitude],
-      lon: opts[:longitude]
-    })
-
-    # |> Phoenix.LiveView.push_event("update_marker_position", %{
-    #   reference: opts[:reference],
-    #   lat: address[:latitude],
-    #   lon: address[:longitude],
-    #   center_view: true
-    # })
   end
 end

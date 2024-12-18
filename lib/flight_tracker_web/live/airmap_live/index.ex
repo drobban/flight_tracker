@@ -63,7 +63,17 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
   end
 
   @impl true
-  def handle_info(%Aircraft.State{} = aircraft, socket) do
+  def handle_info(%Aircraft.State{status: :landed} = aircraft, socket) do
+    # Add marker will add new and update old markers.
+    socket =
+      socket
+      |> Phoenix.LiveView.push_event("remove_marker", %{reference: aircraft.name})
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(%Aircraft.State{status: :inflight} = aircraft, socket) do
     socket =
       socket
       |> Phoenix.LiveView.push_event("add_marker", %{
