@@ -4,3 +4,6 @@
 @import "leaflet/dist/leaflet.css";
 
 /* This file is for your main application CSS */
+.moving_element {
+	transition: transform 10s linear;
+}
