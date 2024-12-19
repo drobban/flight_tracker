@@ -52,10 +52,9 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
       FlightControl.unsubscribe(socket.assigns.substring)
     end
 
-    # This is what our aircraft will construct and check if inside of. 
-    Logger.debug(inspect(FlightControl.Grid.Square.new(lat1, lng1, lat2, lng2)))
+    {lat_buff, lng_buff} = calc_bound_buffer(lat1, lng1, lat2, lng2)
 
-    lat_lng = "#{lat1}:#{lng1}_#{lat2}:#{lng2}"
+    lat_lng = "#{lat1+lat_buff}:#{lng1-lng_buff}_#{lat2-lat_buff}:#{lng2+lng_buff}"
     PubSub.subscribe(FlightTracker.PubSub, lat_lng)
     FlightControl.subscribe(lat_lng)
 
@@ -93,5 +92,12 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
     </div>
     <.button phx-click="add-plane">En till</.button>
     """
+  end
+
+  defp calc_bound_buffer(lat1, lng1, lat2, lng2) do
+      lat_buffer = (lat1-lat2)/2 
+      lng_buffer = (lng2-lng1)/2 
+
+      {lat_buffer, lng_buffer}
   end
 end

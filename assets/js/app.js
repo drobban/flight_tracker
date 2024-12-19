@@ -64,6 +64,7 @@ Hooks.Map = {
     }).addTo(map);
 
     this.map = map;
+    this.markers = markers;
 
     this.handleEvent("update_marker_position", ({reference, lat, lon, center_view}) => {
       markers[reference].setLatLng(L.latLng(lat, lon))
@@ -130,11 +131,11 @@ Hooks.Map = {
       geojsonLayer = L.geoJSON().addTo(map)
 
       for (const [reference, value] of Object.entries(markers)) {
-        marker = markers[reference]
+        marker = markers[reference];
 
-        marker.remove()
+        marker.remove();
 
-        markers.delete(reference)
+        delete markers[reference];
       }
 
     });
@@ -154,8 +155,12 @@ Hooks.Map = {
     this.pushBounds();
 
     // Send bounds when map is moved or zoomed
-    this.map.on("moveend", () => this.pushBounds());
-    this.map.on("zoomend", () => this.pushBounds());
+    this.map.on("moveend", () => {
+	    this.pushBounds();
+    });
+    this.map.on("zoomend", () => {
+	    this.pushBounds();
+    });
   },
 
   pushBounds() {
@@ -167,6 +172,15 @@ Hooks.Map = {
         south_east: { lat: bounds.getSouthEast().lat, lng: bounds.getSouthEast().lng },
       },
     };
+    console.log(this.markers);
+   
+  for (const key in this.markers) {
+    const marker = this.markers[key];
+    if (!bounds.contains(marker.getLatLng())) {
+      marker.remove();
+      delete this.markers[key];
+    }
+  } 
 
     // Push event to LiveView
     this.pushEvent("update_bounds", payload);
