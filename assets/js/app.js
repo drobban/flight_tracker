@@ -48,7 +48,7 @@ Hooks.Map = {
 	var civilian_transport = L.icon({
 	    iconUrl: 'assets/images/civilian-transport.png', // Path to your PNG image
 	    iconSize: [32, 32], // Size of the icon (width, height in pixels)
-	    iconAnchor: [16, 32], // Point of the icon which will correspond to the marker's position (center bottom)
+	    iconAnchor: [16, 16], // Point of the icon which will correspond to the marker's position (center bottom)
 	    className: 'moving_element',
 	    popupAnchor: [0, -32] // Position of the popup relative to the icon (above the marker)
 	});
@@ -95,20 +95,32 @@ Hooks.Map = {
       map.setZoom(zoom_level)
     });
 
-    this.handleEvent("add_marker", ({reference, lat, lon}) => {      
+    this.handleEvent("add_marker", ({reference, lat, lon, bearing}) => {      
 	const marker_icons = {
-		"civilian-transport": { icon: civilian_transport },
+		"civilian-transport": { icon: civilian_transport},
 		"": {}
 	}
       // lets not add duplicates for the same marker!
       if (markers[reference] == null) {
         const marker = L.marker(L.latLng(lat, lon), marker_icons["civilian-transport"])
 
+
         marker.addTo(map)
 
         markers[reference] = marker
+
+	// Access the DOM element and rotate it
+	const markerElement = marker.getElement();
+	if (markerElement) {
+	  markerElement.style.transform += ` rotate(${bearing-210}deg)`;
+	}
       } else {
         markers[reference].setLatLng(L.latLng(lat, lon))
+
+	const markerElement = markers[reference].getElement();
+	if (markerElement) {
+	  markerElement.style.transform += ` rotate(${bearing-210}deg)`;
+	}
       }
     });
 
@@ -126,18 +138,13 @@ Hooks.Map = {
     });
 
     this.handleEvent("clear", () => {
-      geojsonLayer.remove()
+      geojsonLayer.clearLayers();
 
-      geojsonLayer = L.geoJSON().addTo(map)
-
-      for (const [reference, value] of Object.entries(markers)) {
-        marker = markers[reference];
-
+      for (const reference in markers) {
+        let marker = markers[reference];
         marker.remove();
-
         delete markers[reference];
       }
-
     });
 
     this.handleEvent("remove_marker", ({reference}) => {
@@ -172,7 +179,6 @@ Hooks.Map = {
         south_east: { lat: bounds.getSouthEast().lat, lng: bounds.getSouthEast().lng },
       },
     };
-    console.log(this.markers);
    
   for (const key in this.markers) {
     const marker = this.markers[key];
@@ -190,8 +196,8 @@ Hooks.Map = {
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
-	params: {_csrf_token: csrfToken}, 
-	hooks: Hooks
+  params: {_csrf_token: csrfToken}, 
+  hooks: Hooks,
 })
 
 // Show progress bar on live navigation and form submits

@@ -54,7 +54,7 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
 
     {lat_buff, lng_buff} = calc_bound_buffer(lat1, lng1, lat2, lng2)
 
-    lat_lng = "#{lat1+lat_buff}:#{lng1-lng_buff}_#{lat2-lat_buff}:#{lng2+lng_buff}"
+    lat_lng = "#{lat1 + lat_buff}:#{lng1 - lng_buff}_#{lat2 - lat_buff}:#{lng2 + lng_buff}"
     PubSub.subscribe(FlightTracker.PubSub, lat_lng)
     FlightControl.subscribe(lat_lng)
 
@@ -78,7 +78,8 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
       |> Phoenix.LiveView.push_event("add_marker", %{
         reference: aircraft.name,
         lat: aircraft.pos_lat,
-        lon: aircraft.pos_long
+        lon: aircraft.pos_lng,
+        bearing: aircraft.bearing
       })
 
     {:noreply, socket}
@@ -95,9 +96,9 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
   end
 
   defp calc_bound_buffer(lat1, lng1, lat2, lng2) do
-      lat_buffer = (lat1-lat2)/2 
-      lng_buffer = (lng2-lng1)/2 
+    lat_buffer = (lat1 - lat2) / 2
+    lng_buffer = (lng2 - lng1) / 2
 
-      {lat_buffer, lng_buffer}
+    {lat_buffer, lng_buffer}
   end
 end
