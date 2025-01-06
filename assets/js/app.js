@@ -54,6 +54,7 @@ Hooks.Map = {
     const markers = {};
     const map = L.map("mapid").setView([51.505, -0.09], 14);
     const paths = {};
+    let ref_marker = "";
     let geojsonLayer = L.geoJSON().addTo(map).setStyle({ color: "#6435c9" });
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -99,7 +100,22 @@ Hooks.Map = {
       map.setZoom(zoom_level);
     });
 
+    this.handleEvent("set_ref_trace", ({ reference }) => {
+      if (markers[reference] == null) {
+        // We could try to implement get_state from process.
+        console.log("Have no lock on target");
+      } else {
+        console.log("We have a lock on target");
+        ref_marker = reference;
+      }
+    });
+
     this.handleEvent("add_marker", ({ reference, lat, lon, bearing }) => {
+      // Center map to aircraft
+      if (ref_marker == reference) {
+        map.setView(L.latLng(lat, lon));
+      }
+
       const marker_icons = {
         "civilian-transport": civilian_transport,
         "": {},
@@ -128,6 +144,7 @@ Hooks.Map = {
           markerElement.style.transform += ` rotate(${bearing - 180}deg)`;
         }
       }
+
       markers[reference].on("click", () => {
         this.pushEvent("show_details", { flight_nr: reference });
       });

@@ -22,22 +22,6 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
     {:ok, socket}
   end
 
-  @doc """
-  add-plane is just a simple test.
-
-  update_bounds recieves new view bounds of the leaflet js map on 
-  init/mount and every map update (zoom/movement)
-
-  """
-  @impl true
-  def handle_event("add-plane", _unsigned_params, socket) do
-    socket =
-      socket
-      |> Phoenix.LiveView.push_event("add_marker", %{reference: "MH418", lat: 51.123, lon: 7.3})
-
-    {:noreply, socket}
-  end
-
   def handle_event(
         "update_bounds",
         %{
@@ -67,8 +51,20 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
     {:noreply, socket |> assign(:show_modal, true) |> assign(:flight_nr, reference)}
   end
 
+  @impl true
   def handle_event("hide_details", _, socket) do
     {:noreply, socket |> assign(:show_modal, false) |> assign(:flight_nr, nil)}
+  end
+
+  @impl true
+  def handle_event("lock_flight", %{"reference" => name}, socket) do
+    Logger.debug("Flight lock requested")
+
+    socket =
+      socket
+      |> Phoenix.LiveView.push_event("set_ref_trace", %{reference: name})
+
+    {:noreply, socket}
   end
 
   @impl true

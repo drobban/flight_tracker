@@ -11,6 +11,12 @@ defmodule FlightTrackerWeb.AirmapLive.FlightComponent do
         <:subtitle>Flight <%= @flight_nr %></:subtitle>
       </.header>
       <pre><%= raw(inspect(Aircraft.get_state(@flight_nr).aircraft, pretty: true, limit: 1000)) %></pre>
+      <.button
+        class="btn btn-primary"
+        phx-click={JS.push("lock_flight", value: %{reference: @flight_nr})}
+      >
+        Lock on flight
+      </.button>
     </div>
     """
   end
