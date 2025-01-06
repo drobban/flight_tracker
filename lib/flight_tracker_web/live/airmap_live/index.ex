@@ -16,6 +16,8 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
       |> LeafletMap.liveview_setup(opts)
       |> assign(:map_bounds, nil)
       |> assign(:substring, nil)
+      |> assign(:show_modal, false)
+      |> assign(:flight_nr, nil)
 
     {:ok, socket}
   end
@@ -61,6 +63,14 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
     {:noreply, socket |> assign(map_bounds: bounds) |> assign(:substring, lat_lng)}
   end
 
+  def handle_event("show_details", %{"flight_nr" => reference}, socket) do
+    {:noreply, socket |> assign(:show_modal, true) |> assign(:flight_nr, reference)}
+  end
+
+  def handle_event("hide_details", _, socket) do
+    {:noreply, socket |> assign(:show_modal, false) |> assign(:flight_nr, nil)}
+  end
+
   @impl true
   def handle_info(%Aircraft.State{status: :landed} = aircraft, socket) do
     # Add marker will add new and update old markers.
@@ -91,7 +101,21 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
     <div class="h-full w-full justify-center items-center">
       <LeafletMap.map class="h-full bg-gray" />
     </div>
-    <.button phx-click="add-plane">En till</.button>
+    <.panel_modal
+      :if={@show_modal}
+      id="aircraft-modal"
+      show
+      on_cancel={JS.push("hide_details", value: %{})}
+    >
+      <div class="min-h-full" style="min-height: 80vh">
+        <.live_component
+          module={FlightTrackerWeb.AirmapLive.FlightComponent}
+          id={@flight_nr}
+          title="Details"
+          flight_nr={@flight_nr}
+        />
+      </div>
+    </.panel_modal>
     """
   end
 

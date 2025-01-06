@@ -5,7 +5,12 @@ defmodule FlightTrackerWeb.Components.LeafletMap do
 
   def map(assigns) do
     ~H"""
-    <div class="h-full" style="overflow: hidden" phx-update="ignore" id="mapcontainer">
+    <div
+      class="h-full"
+      style="overflow: hidden; z-index: 0; position: relative;"
+      phx-update="ignore"
+      id="mapcontainer"
+    >
       <div class={@class} phx-hook="Map" id="mapid" style="height: 80vh;"></div>
     </div>
     """
