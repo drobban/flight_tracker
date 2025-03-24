@@ -19,7 +19,7 @@ defmodule FlightTracker.MixProject do
   def application do
     [
       mod: {FlightTracker.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :wx, :observer, :runtime_tools]
     ]
   end
 
