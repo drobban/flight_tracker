@@ -106,7 +106,7 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
       <div class="min-h-full" style="min-height: 80vh">
         <.live_component
           module={FlightTrackerWeb.AirmapLive.FlightComponent}
-          id={@flight_nr}
+          id={"comp-#{@flight_nr}"}
           title="Details"
           flight_nr={@flight_nr}
         />
