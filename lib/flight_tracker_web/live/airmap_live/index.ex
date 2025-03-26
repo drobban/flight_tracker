@@ -77,6 +77,21 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
     {:noreply, socket}
   end
 
+  @impl true 
+  def handle_info(%SamSite.State{status: :online} = samsite, socket) do
+     socket =
+      socket
+      |> Phoenix.LiveView.push_event("add_marker", %{
+        reference: samsite.name,
+        lat: samsite.pos_lat,
+        lon: samsite.pos_lng,
+        bearing: 180.0,
+        icon: "aa"
+      })
+
+    {:noreply, socket}
+  end
+
   @impl true
   def handle_info(%Aircraft.State{status: :inflight} = aircraft, socket) do
     socket =
@@ -85,7 +100,8 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
         reference: aircraft.name,
         lat: aircraft.pos_lat,
         lon: aircraft.pos_lng,
-        bearing: aircraft.bearing
+        bearing: aircraft.bearing,
+        icon: "civilian-transport"
       })
 
     {:noreply, socket}

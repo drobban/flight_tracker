@@ -5,7 +5,7 @@ defmodule FlightTracker.MixProject do
     [
       app: :flight_tracker,
       version: "0.1.0",
-      elixir: "~> 1.14",
+      elixir: "~> 1.17",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -59,6 +59,7 @@ defmodule FlightTracker.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
       {:aircraft, path: "/home/drobban/code/elixir/aircraft"},
+      {:sam_site, path: "/home/drobban/code/elixir/sam_site"},
       {:flight_control, path: "/home/drobban/code/elixir/flight_control"}
     ]
   end

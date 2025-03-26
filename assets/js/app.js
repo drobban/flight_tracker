@@ -46,7 +46,15 @@ Hooks.Map = {
     var civilian_transport = L.icon({
       iconUrl: "assets/images/civilian-transport_b.png", // Path to your PNG image
       iconSize: [64, 64], // Size of the icon (width, height in pixels)
-      iconAnchor: [16, 16], // Point of the icon which will correspond to the marker's position (center bottom)
+      iconAnchor: [-32, -32], // Point of the icon which will correspond to the marker's position (center bottom)
+      className: "moving_element",
+      popupAnchor: [0, -32], // Position of the popup relative to the icon (above the marker)
+    });
+
+    var anti_aircraft = L.icon({
+      iconUrl: "assets/images/aa_small.png", // Path to your PNG image
+      iconSize: [64, 64], // Size of the icon (width, height in pixels)
+      iconAnchor: [0, 0], // Point of the icon which will correspond to the marker's position (center bottom)
       className: "moving_element",
       popupAnchor: [0, -32], // Position of the popup relative to the icon (above the marker)
     });
@@ -110,7 +118,7 @@ Hooks.Map = {
       }
     });
 
-    this.handleEvent("add_marker", ({ reference, lat, lon, bearing }) => {
+    this.handleEvent("add_marker", ({ reference, lat, lon, bearing, icon }) => {
       // Center map to aircraft
       if (ref_marker == reference) {
         map.setView(L.latLng(lat, lon));
@@ -118,12 +126,12 @@ Hooks.Map = {
 
       const marker_icons = {
         "civilian-transport": civilian_transport,
-        "": {},
+        "aa": anti_aircraft,
       };
       // lets not add duplicates for the same marker!
       if (markers[reference] == null) {
         const marker = L.marker(L.latLng(lat, lon), {
-          icon: marker_icons["civilian-transport"],
+          icon: marker_icons[icon],
           title: `${reference}`,
         });
 
