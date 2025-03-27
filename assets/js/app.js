@@ -54,7 +54,7 @@ Hooks.Map = {
     var anti_aircraft = L.icon({
       iconUrl: "assets/images/aa_small.png", // Path to your PNG image
       iconSize: [64, 64], // Size of the icon (width, height in pixels)
-      iconAnchor: [0, 0], // Point of the icon which will correspond to the marker's position (center bottom)
+      iconAnchor: [32, 64], // Point of the icon which will correspond to the marker's position (center bottom)
       className: "moving_element",
       popupAnchor: [0, -32], // Position of the popup relative to the icon (above the marker)
     });

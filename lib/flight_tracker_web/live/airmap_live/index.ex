@@ -9,7 +9,7 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    opts = [latitude: 51.123456, longitude: 7.123456, reference: "main"]
+    opts = [latitude: 54.733370063961715, longitude: 20.489215711966924, reference: "main"]
 
     socket =
       socket
