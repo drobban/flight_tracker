@@ -94,7 +94,7 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
 
 
   @impl true 
-  def handle_info(%SamSite.Missile.State{} = missile, socket) do
+  def handle_info(%SamSite.Missile.State{status: :onroute} = missile, socket) do
      socket =
       socket
       |> Phoenix.LiveView.push_event("add_marker", %{
@@ -104,6 +104,17 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
         bearing: missile.bearing,
         icon: "missile"
       })
+
+    {:noreply, socket}
+  end
+
+
+  @impl true
+  def handle_info(%SamSite.Missile.State{status: _status} = missile, socket) do
+    # Add marker will add new and update old markers.
+    socket =
+      socket
+      |> Phoenix.LiveView.push_event("remove_marker", %{reference: missile.name})
 
     {:noreply, socket}
   end
