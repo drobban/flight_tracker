@@ -44,7 +44,7 @@ let Hooks = {};
 Hooks.Map = {
   mounted() {
     var civilian_transport = L.icon({
-      iconUrl: "assets/images/civilian-transport_b.png", // Path to your PNG image
+      iconUrl: "assets/images/civilian-transport_b.png",
       iconSize: [64, 64], // Size of the icon (width, height in pixels)
       iconAnchor: [-32, -32], // Point of the icon which will correspond to the marker's position (center bottom)
       className: "moving_element",
@@ -52,9 +52,17 @@ Hooks.Map = {
     });
 
     var anti_aircraft = L.icon({
-      iconUrl: "assets/images/aa_small.png", // Path to your PNG image
+      iconUrl: "assets/images/aa_small.png",
       iconSize: [64, 64], // Size of the icon (width, height in pixels)
       iconAnchor: [32, 64], // Point of the icon which will correspond to the marker's position (center bottom)
+      className: "moving_element",
+      popupAnchor: [0, -32], // Position of the popup relative to the icon (above the marker)
+    });
+
+    var missile = L.icon({
+      iconUrl: "assets/images/missile.gif",
+      iconSize: [32, 32], // Size of the icon (width, height in pixels)
+      iconAnchor: [16, 16], // Point of the icon which will correspond to the marker's position (center bottom)
       className: "moving_element",
       popupAnchor: [0, -32], // Position of the popup relative to the icon (above the marker)
     });
@@ -127,6 +135,7 @@ Hooks.Map = {
       const marker_icons = {
         "civilian-transport": civilian_transport,
         "aa": anti_aircraft,
+        "missile": missile,
       };
       // lets not add duplicates for the same marker!
       if (markers[reference] == null) {
