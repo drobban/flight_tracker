@@ -135,6 +135,22 @@ defmodule FlightTrackerWeb.AirmapLive.Index do
     {:noreply, socket}
   end
 
+
+  @impl true
+  def handle_info(%Aircraft.State{status: :crash} = aircraft, socket) do
+    socket =
+      socket
+      |> Phoenix.LiveView.push_event("add_marker", %{
+        reference: aircraft.name,
+        lat: aircraft.pos_lat,
+        lon: aircraft.pos_lng,
+        bearing: aircraft.bearing,
+        icon: "crash"
+      })
+
+    {:noreply, socket}
+  end
+
   @impl true
   def render(assigns) do
     ~H"""

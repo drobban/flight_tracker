@@ -46,7 +46,7 @@ Hooks.Map = {
     var civilian_transport = L.icon({
       iconUrl: "assets/images/civilian-transport_b.png",
       iconSize: [64, 64], // Size of the icon (width, height in pixels)
-      iconAnchor: [-32, -32], // Point of the icon which will correspond to the marker's position (center bottom)
+      iconAnchor: [32, 32], // Point of the icon which will correspond to the marker's position (center bottom)
       className: "moving_element",
       popupAnchor: [0, -32], // Position of the popup relative to the icon (above the marker)
     });
@@ -61,6 +61,15 @@ Hooks.Map = {
 
     var missile = L.icon({
       iconUrl: "assets/images/missile.gif",
+      iconSize: [32, 32], // Size of the icon (width, height in pixels)
+      iconAnchor: [16, 16], // Point of the icon which will correspond to the marker's position (center bottom)
+      className: "moving_element",
+      popupAnchor: [0, -32], // Position of the popup relative to the icon (above the marker)
+    });
+
+
+    var crash = L.icon({
+      iconUrl: "assets/images/explosion.gif",
       iconSize: [32, 32], // Size of the icon (width, height in pixels)
       iconAnchor: [16, 16], // Point of the icon which will correspond to the marker's position (center bottom)
       className: "moving_element",
@@ -136,6 +145,7 @@ Hooks.Map = {
         "civilian-transport": civilian_transport,
         "aa": anti_aircraft,
         "missile": missile,
+	"crash": crash,
       };
       // lets not add duplicates for the same marker!
       if (markers[reference] == null) {
@@ -154,6 +164,7 @@ Hooks.Map = {
           markerElement.style.transform += ` rotate(${bearing - 180}deg)`;
         }
       } else {
+	markers[reference].setIcon(marker_icons[icon]);
         markers[reference].setLatLng(L.latLng(lat, lon));
 
         const markerElement = markers[reference].getElement();
