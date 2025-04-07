@@ -58,6 +58,7 @@ defmodule FlightTracker.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
+      #{:aircraft, [override: true, path: "../aircraft"]},
       {:aircraft, git: "https://github.com/drobban/aircraft.git"},
       {:sam_site, git: "https://github.com/drobban/sam_site.git"},
       {:flight_control, git: "https://github.com/drobban/flight_control.git"}
